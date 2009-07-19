@@ -2,7 +2,9 @@
   <%%= f.error_messages %>
 
   <fieldset>
+<%% if false %>
     <legend><%%= t('<%= singular_name %>', :count => 1).humanize %></legend>
+<%% end %>
 
 <% for attribute in attributes -%>
     <div class="required">

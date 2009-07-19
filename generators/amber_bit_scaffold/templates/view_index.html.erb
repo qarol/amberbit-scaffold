@@ -6,9 +6,8 @@
 
 <table>
   <tr>
-    <%%= sortable_th :<%= attributes.first.column.name %> %>
-<% for attribute in attributes[1, attributes.size] -%>
-    <th><%%= t('<%= "attribute.#{attribute.column.name}" %>') %></th>
+<% for attribute in attributes -%>
+  <%%= sortable_th :<%= attribute.column.name %> %>
 <% end -%>
     <th></th>
   </tr>

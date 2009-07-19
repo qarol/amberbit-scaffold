@@ -24,6 +24,8 @@ module Sortable::Controller
     else
       @sort_order.upcase!
     end
+    
+    @sort_columns = sortable_columns
 
     order_sql = "LOWER(#{@sort_by}) #{@sort_order}"
   end
