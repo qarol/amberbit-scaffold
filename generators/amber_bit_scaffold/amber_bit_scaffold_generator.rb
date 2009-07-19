@@ -2,14 +2,14 @@ class AmberBitScaffoldGenerator < Rails::Generator::NamedBase
   default_options :skip_timestamps => false, :skip_migration => false, :force_plural => false
 
   attr_reader   :controller_name,
-                :controller_class_path,
-                :controller_file_path,
-                :controller_class_nesting,
-                :controller_class_nesting_depth,
-                :controller_class_name,
-                :controller_underscore_name,
-                :controller_singular_name,
-                :controller_plural_name
+   :controller_class_path,
+   :controller_file_path,
+   :controller_class_nesting,
+   :controller_class_nesting_depth,
+   :controller_class_name,
+   :controller_underscore_name,
+   :controller_singular_name,
+   :controller_plural_name
   alias_method  :controller_file_name,  :controller_underscore_name
   alias_method  :controller_table_name, :controller_plural_name
 
@@ -38,6 +38,13 @@ class AmberBitScaffoldGenerator < Rails::Generator::NamedBase
       # Check for class naming collisions.
       m.class_collisions("#{controller_class_name}Controller", "#{controller_class_name}Helper")
       m.class_collisions(class_name)
+
+      # Layout
+      if !FileTest.exist?('app/views/layouts/application.html.erb')
+        m.directory('app/views/layouts')
+        m.template('default_layouts.html.erb', 'app/views/layouts/application.html.erb')
+        m.template('default_css.html.erb', 'public/stylesheets/application.css')
+      end
 
       # Controller, helper, views and test directories.
       m.directory(File.join('app/models', class_path))
@@ -68,27 +75,27 @@ class AmberBitScaffoldGenerator < Rails::Generator::NamedBase
   end
 
   protected
-    # Override with your own usage banner.
-    def banner
-      "Usage: #{$0} amber_bit_scaffold ModelName [field:type, field:type]"
-    end
+  # Override with your own usage banner.
+  def banner
+    "Usage: #{$0} amber_bit_scaffold ModelName [field:type, field:type]"
+  end
 
-    def add_options!(opt)
-      opt.separator ''
-      opt.separator 'Options:'
-      opt.on("--skip-timestamps",
-             "Don't add timestamps to the migration file for this model") { |v| options[:skip_timestamps] = v }
-      opt.on("--skip-migration",
-             "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
-      opt.on("--force-plural",
-             "Forces the generation of a plural ModelName") { |v| options[:force_plural] = v }
-    end
+  def add_options!(opt)
+    opt.separator ''
+    opt.separator 'Options:'
+    opt.on("--skip-timestamps",
+      "Don't add timestamps to the migration file for this model") { |v| options[:skip_timestamps] = v }
+    opt.on("--skip-migration",
+      "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
+    opt.on("--force-plural",
+      "Forces the generation of a plural ModelName") { |v| options[:force_plural] = v }
+  end
 
-    def scaffold_views
-      %w[ index show new edit _form ]
-    end
+  def scaffold_views
+    %w[ index show new edit _form ]
+  end
 
-    def model_name
-      class_name.demodulize
-    end
+  def model_name
+    class_name.demodulize
+  end
 end
